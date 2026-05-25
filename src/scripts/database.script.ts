@@ -45,18 +45,67 @@ const createDatabase = async () => {
 };
 
 async function createUsersTable(databaseId: string) {
-	// TODO
+	if (
+		!process.env.APPWRITE_USERS_TABLE_NAME ||
+		!process.env.APPWRITE_USERS_TABLE_ID
+	) {
+		throw new Error('Missing users table name or ID in environment variables.');
+	}
+
+	const { APPWRITE_USERS_TABLE_ID, APPWRITE_USERS_TABLE_NAME } = process.env;
+
+	await tablesDB.createTable({
+		databaseId,
+		tableId: APPWRITE_USERS_TABLE_ID,
+		name: APPWRITE_USERS_TABLE_NAME,
+	});
+
+	const usersTableIds = { databaseId, tableId: APPWRITE_USERS_TABLE_ID };
+
+	await Promise.all([
+		tablesDB.createVarcharColumn({
+			...usersTableIds,
+			key: 'name',
+			required: true,
+			size: 255,
+		}),
+		tablesDB.createEmailColumn({
+			...usersTableIds,
+			key: 'email',
+			required: true,
+		}),
+		tablesDB.createVarcharColumn({
+			...usersTableIds,
+			key: 'accountId',
+			required: true,
+			size: 255,
+		}),
+		tablesDB.createUrlColumn({
+			...usersTableIds,
+			key: 'avatar',
+			required: false,
+		}),
+		tablesDB.createVarcharColumn({
+			...usersTableIds,
+			key: 'avatarId',
+			required: false,
+			size: 255,
+		}),
+	]);
 }
 
 async function createEventsTable(databaseId: string) {
 	// TODO
 }
 
-export async function initializeDatabase() {
+async function initializeDatabase() {
 	try {
 		const databaseId = await createDatabase();
-		await createUsersTable(databaseId);
-		await createEventsTable(databaseId);
+
+		await Promise.all([
+			createUsersTable(databaseId),
+			createEventsTable(databaseId),
+		]);
 	} catch (error) {
 		console.error('Database initialization failed:', error);
 		process.exit(1);
