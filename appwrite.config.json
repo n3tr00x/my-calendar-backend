@@ -1,0 +1,228 @@
+{
+    "projectId": "6a12fb5b003be67bb625",
+    "projectName": "my-calendar",
+    "endpoint": "https://fra.cloud.appwrite.io/v1",
+    "settings": {
+        "services": {
+            "account": true,
+            "avatars": true,
+            "databases": true,
+            "locale": true,
+            "health": true,
+            "storage": true,
+            "teams": true,
+            "users": true,
+            "sites": true,
+            "functions": true,
+            "graphql": true,
+            "messaging": true
+        },
+        "protocols": {
+            "rest": true,
+            "graphql": true,
+            "websocket": true
+        },
+        "auth": {
+            "methods": {
+                "jwt": true,
+                "phone": true,
+                "invites": true,
+                "anonymous": true,
+                "email-otp": true,
+                "magic-url": true,
+                "email-password": true
+            },
+            "security": {
+                "duration": 31536000,
+                "limit": 0,
+                "sessionsLimit": 0,
+                "passwordHistory": 0,
+                "passwordDictionary": false,
+                "personalDataCheck": false,
+                "sessionAlerts": false,
+                "mockNumbers": []
+            }
+        }
+    },
+    "tablesDB": [
+        {
+            "$id": "6a158a0c001a685303b0",
+            "name": "my-calendar-db",
+            "enabled": true
+        }
+    ],
+    "tables": [
+        {
+            "$id": "users",
+            "$permissions": [],
+            "databaseId": "6a158a0c001a685303b0",
+            "name": "users",
+            "enabled": true,
+            "rowSecurity": false,
+            "columns": [
+                {
+                    "key": "name",
+                    "type": "varchar",
+                    "required": true,
+                    "array": false,
+                    "size": 255,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "avatarUrl",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "default": null,
+                    "format": "url"
+                },
+                {
+                    "key": "avatarId",
+                    "type": "varchar",
+                    "required": false,
+                    "array": false,
+                    "size": 24,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "accountId",
+                    "type": "varchar",
+                    "required": true,
+                    "array": false,
+                    "size": 24,
+                    "default": null,
+                    "encrypt": false
+                }
+            ],
+            "indexes": [
+                {
+                    "key": "accountId_index",
+                    "type": "key",
+                    "status": "available",
+                    "columns": [
+                        "accountId"
+                    ],
+                    "orders": [
+                        "asc"
+                    ]
+                }
+            ]
+        },
+        {
+            "$id": "events",
+            "$permissions": [],
+            "databaseId": "6a158a0c001a685303b0",
+            "name": "events",
+            "enabled": true,
+            "rowSecurity": false,
+            "columns": [
+                {
+                    "key": "title",
+                    "type": "varchar",
+                    "required": true,
+                    "array": false,
+                    "size": 255,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "description",
+                    "type": "varchar",
+                    "required": false,
+                    "array": false,
+                    "size": 2200,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "isAllDay",
+                    "type": "boolean",
+                    "required": true,
+                    "array": false,
+                    "default": null
+                },
+                {
+                    "key": "location",
+                    "type": "varchar",
+                    "required": false,
+                    "array": false,
+                    "size": 255,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "repeat",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "default": null,
+                    "format": "enum",
+                    "elements": [
+                        "no-repeat",
+                        "daily",
+                        "weekly",
+                        "monthly"
+                    ]
+                },
+                {
+                    "key": "startDate",
+                    "type": "datetime",
+                    "required": true,
+                    "array": false,
+                    "default": null,
+                    "format": ""
+                },
+                {
+                    "key": "endDate",
+                    "type": "datetime",
+                    "required": true,
+                    "array": false,
+                    "default": null,
+                    "format": ""
+                },
+                {
+                    "key": "startTime",
+                    "type": "varchar",
+                    "required": false,
+                    "array": false,
+                    "size": 5,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "endTime",
+                    "type": "varchar",
+                    "required": false,
+                    "array": false,
+                    "size": 5,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "accountId",
+                    "type": "varchar",
+                    "required": true,
+                    "array": false,
+                    "size": 24,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "user",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedTable": "users",
+                    "relationType": "manyToOne",
+                    "twoWay": false,
+                    "twoWayKey": "events",
+                    "onDelete": "cascade",
+                    "side": "parent"
+                }
+            ],
+            "indexes": []
+        }
+    ]
+}

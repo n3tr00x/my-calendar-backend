@@ -1,4 +1,4 @@
-import { Client, Databases, Storage, Users } from 'node-appwrite';
+import { Client, Storage, Users, TablesDB } from 'node-appwrite';
 
 if (
 	!process.env.APPWRITE_URL ||
@@ -13,6 +13,6 @@ const client = new Client()
 	.setProject(process.env.APPWRITE_PROJECT_ID!)
 	.setKey(process.env.APPWRITE_API_KEY!);
 
-export const databases = new Databases(client);
 export const storage = new Storage(client);
 export const users = new Users(client);
+export const tablesDB = new TablesDB(client);
