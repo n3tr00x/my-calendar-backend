@@ -1,15 +1,15 @@
-import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 
+import ENV from './env.js';
 import { errorMiddleware } from './middlewares/error.middleware.js';
 
 const app = express();
-const PORT = process.env.PORT ?? 3000;
+const PORT = ENV.PORT ?? 3000;
 
 app.use(
 	cors({
-		origin: process.env.CLIENT_URL,
+		origin: ENV.CLIENT_URL,
 		credentials: true,
 	}),
 );

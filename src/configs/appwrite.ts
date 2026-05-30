@@ -1,18 +1,22 @@
-import { Client, Databases, Storage, Users } from 'node-appwrite';
+import { Client, Databases, Storage, TablesDB, Users } from 'node-appwrite';
 
-if (
-	!process.env.APPWRITE_URL ||
-	!process.env.APPWRITE_PROJECT_ID ||
-	!process.env.APPWRITE_API_KEY
-) {
-	throw new Error('Missing Appwrite configuration in environment variables.');
-}
+import ENV from '../env.js';
 
 const client = new Client()
-	.setEndpoint(process.env.APPWRITE_URL!)
-	.setProject(process.env.APPWRITE_PROJECT_ID!)
-	.setKey(process.env.APPWRITE_API_KEY!);
+	.setEndpoint(ENV.APPWRITE_URL)
+	.setProject(ENV.APPWRITE_PROJECT_ID)
+	.setKey(ENV.APPWRITE_API_KEY);
 
 export const databases = new Databases(client);
 export const storage = new Storage(client);
 export const users = new Users(client);
+export const tablesDb = new TablesDB(client);
+
+export const appwriteConfig = {
+	databaseId: ENV.APPWRITE_DATABASE_ID,
+	databaseName: ENV.APPWRITE_DATABASE_NAME,
+	usersTableId: ENV.APPWRITE_USERS_TABLE_ID,
+	usersTableName: ENV.APPWRITE_USERS_TABLE_NAME,
+	eventsTableId: ENV.APPWRITE_EVENTS_TABLE_ID,
+	eventsTableName: ENV.APPWRITE_EVENTS_TABLE_NAME,
+};
