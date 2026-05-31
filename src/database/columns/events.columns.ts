@@ -1,13 +1,12 @@
 import { AppwriteException, RelationshipType } from 'node-appwrite';
 
 import { appwriteConfig, tablesDb } from '../../configs/appwrite.js';
-import createUserTableColumns from './users.columns.js';
 
 async function getExistingEventsTableColumn(columnKey: string) {
 	try {
 		const existingColumn = await tablesDb.getColumn({
 			databaseId: appwriteConfig.databaseId,
-			tableId: appwriteConfig.usersTableId,
+			tableId: appwriteConfig.eventsTableId,
 			key: columnKey,
 		});
 
@@ -146,7 +145,7 @@ async function createEventsTableColumns(tableId: string) {
 	const existingUserToEventsRelationColumn = await getExistingEventsTableColumn(
 		'userToEventsRelation',
 	);
-	if (!existingUserToEventsRelationColumn) {
+	if (!existingUserIdColumn && !existingUserToEventsRelationColumn) {
 		await tablesDb.createRelationshipColumn({
 			databaseId: appwriteConfig.databaseId,
 			tableId,

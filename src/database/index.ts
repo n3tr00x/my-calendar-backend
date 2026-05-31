@@ -29,7 +29,7 @@ async function createDatabase() {
 	const existingDatabase = await getExistingDatabase();
 
 	if (existingDatabase) {
-		return { isDatabaseCreated: false, databaseId: existingDatabase.$id };
+		return { isDatabaseExists: true, databaseId: existingDatabase.$id };
 	}
 
 	const database = await tablesDb.create({
@@ -37,23 +37,24 @@ async function createDatabase() {
 		name: appwriteConfig.databaseName,
 	});
 
-	return { isDatabaseCreated: true, databaseId: database.$id };
+	return { isDatabaseExists: false, databaseId: database.$id };
 }
 
 async function initializeDatabase() {
 	try {
-		const { isDatabaseCreated, databaseId } = await createDatabase();
+		const { isDatabaseExists, databaseId } = await createDatabase();
 
-		if (!isDatabaseCreated) {
-			console.log('Database already exists. Skipping creation.');
-			console.log('Database ID:', databaseId);
-		} else {
+		if (!isDatabaseExists && databaseId) {
 			console.log('Database created successfully. Initializing tables...');
 			await initializeUserTable();
 			await initializeEventsTable();
+		} else {
+			console.log('Database already exists. Skipping creation.');
+			console.log('Database ID:', databaseId);
 		}
 	} catch (error) {
 		console.error('Error creating database:', error);
+		process.exit(1);
 	}
 }
 
